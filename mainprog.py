@@ -1,10 +1,17 @@
 import requests
 import json
 
-def tackle_data_from_api():
-    response_of_api = requests.get('https://api.nytimes.com/svc/movies/v2/critics/all.json')
-    print(response_of_api)
-    data =response_of_api.text
+params = {
+  'access_key': '7838e177f2ab9fddc1dbf077cb72708e'
+}
 
-# Press the green button in the gutter to run the script.
-tackle_data_from_api()
+api_result = requests.get('http://api.aviationstack.com/v1/flights', params)
+
+api_response = api_result.json()
+print (api_response)
+
+# Downloading json data into a file
+data = json.dumps(api_response)
+file = open("data.json","w")
+file.write(data)
+print("API data successfully downloaded!!")
