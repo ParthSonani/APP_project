@@ -11,7 +11,7 @@ data = json.load(f)
 print(data)
 
 cursor.executescript('''drop table if exists flight_detail; drop table if exists departure; drop table if exists arrival;
-create table flight_detail (id integer PRIMARY KEY AUTOINCREMENT, flight_date varchar,flight_status varchar, departure_id int,arrival_id int);
+create table flight_detail (id integer PRIMARY KEY AUTOINCREMENT, flight_date varchar,flight_status varchar,airline_name varchar, departure_id int,arrival_id int);
 create table departure (departure_id integer PRIMARY KEY AUTOINCREMENT, airport varchar, timezone varchar, gate varchar, terminal varchar);
 create table arrival (arrival_id integer PRIMARY KEY AUTOINCREMENT, airport varchar, timezone varchar, gate varchar, terminal varchar)''')
 
@@ -31,11 +31,15 @@ for i in range(len(data)):
     flight_status = data[i]['flight_status']
     flight_name = data[i]['airline']['name']
     dep_id ='''select departure_id from departure where airport = (?)'''
-    cursor.execute(dep_id,airportd)
-    d_id = cursor.fetchall()
+    cursor.execute(dep_id,(airportd,))
+    d_id = cursor.fetchone()
     print(d_id)
-    cursor.execute('''insert into flight_detail (airport,timezone,gate,terminal) values (?,?,?,?)''',
-                   (airporta, timezonea, gatea, terminala))
+    arr_id = '''select arrival_id from arrival where airport = (?)'''
+    cursor.execute(arr_id, (airporta,))
+    a_id = cursor.fetchone()
+    print(a_id)
+    cursor.execute('''insert into flight_detail (flight_date,flight_status,airline_name,departure_id,arrival_id) values (?,?,?,?,?)''',
+                   (flight_date, flight_status, flight_name,d_id[0],a_id[0]))
     conn.commit()
 
 cursor.close()
