@@ -1,5 +1,4 @@
 import json
-import pandas as pd
 import sqlite3
 
 conn = sqlite3.connect('flight.db')
@@ -21,23 +20,31 @@ for i in range(len(data)):
     gated = data[i]['departure']['gate']
     terminald = data[i]['departure']['terminal']
     cursor.execute('''insert into departure (airport,timezone,gate,terminal) values (?,?,?,?)''',(airportd,timezoned,gated,terminald))
+    conn.commit()
+
+for i in range(len(data)):
     airporta = data[i]['arrival']['airport']
     timezonea = data[i]['arrival']['timezone']
     gatea = data[i]['arrival']['gate']
     terminala = data[i]['arrival']['terminal']
     cursor.execute('''insert into arrival (airport,timezone,gate,terminal) values (?,?,?,?)''',
                    (airporta, timezonea, gatea, terminala))
+    conn.commit()
+
+for i in range(len(data)):
     flight_date = data[i]['flight_date']
     flight_status = data[i]['flight_status']
     flight_name = data[i]['airline']['name']
+    airportd = data[i]['departure']['airport']
+    airporta = data[i]['arrival']['airport']
     dep_id ='''select departure_id from departure where airport = (?)'''
     cursor.execute(dep_id,(airportd,))
     d_id = cursor.fetchone()
-    print(d_id)
+    print('d:',d_id)
     arr_id = '''select arrival_id from arrival where airport = (?)'''
     cursor.execute(arr_id, (airporta,))
     a_id = cursor.fetchone()
-    print(a_id)
+    print('a :',a_id)
     cursor.execute('''insert into flight_detail (flight_date,flight_status,airline_name,departure_id,arrival_id) values (?,?,?,?,?)''',
                    (flight_date, flight_status, flight_name,d_id[0],a_id[0]))
     conn.commit()
