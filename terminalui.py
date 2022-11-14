@@ -18,11 +18,53 @@ def sql_fetch(con):
 
     return table_list
 
+def display_tables(tb_name):
+    table_name = tb_name
+
+    if (table_name == i):
+        cursor.execute(('SELECT * FROM "{}" '.format(table_name.replace('"', '""'))))
+        tab = cursor.fetchall()
+        col_name = [i[0] for i in cursor.description]
+        col_len = len(col_name)
+        # for a in col_name:
+        print("--------------------------------------------------------------------")
+        print(*col_name, sep=" | ")
+        print("--------------------------------------------------------------------")
+        stmt = []
+        for row in tab:
+            print(row)
+            # print(str(row[0]),'  |  ', str(row[1]), '|', str(row[2]), '|', str(row[3]), '|', str(row[4]))
+
+        display_operations()
+        op = input("Input here: ")
+
+        # Update query
+        if (op == "1" or op == "update" or op == "Update"):
+            # print("hahahah")
+            # update_id = input("Enter "+col_name[0]+ " of the record to be updated : ")
+            id = col_name[0]
+            update_data(id, col_name)
+
+        # Delete query
+        if (op == "2" or op == "delete" or op == "Delete"):
+            # delete_id = input("Enter " + col_name[0] + " of the record to be deleted : ")
+            id = col_name[0]
+            delete_data(id, col_name)
+
+        # Download data
+        if (op == "3" or op == "download" or op == "Download table"):
+            download_data()
+
+        # Exit application
+        if (op == "0" or op == "4" or op == "exit"):
+            exit()
+
+
 def display_operations():
     print("\nChoose operation to perform on " + table_name + " :\n 1. Update\n 2. Delete \n 3. Download table (.csv)\n"
                                                              " 4. Enter to 0 to exit \n")
 
-def update_data(col):
+def update_data(col, col_name):
     update_id = input("Enter " + col_name[0] + " of the record to be updated : ")
     id = col
     try:
@@ -55,7 +97,7 @@ def update_data(col):
     except Exception as e:
         print(e)
 
-def delete_data(col):
+def delete_data(col, col_name):
     id = col
     delete_id = input("Enter " + col_name[0] + " of the record to be deleted : ")
     try:
@@ -95,39 +137,4 @@ tables = sql_fetch(conn)
 table_name = input("Enter the name of table you wish to access: ")
 
 for i in tables:
-    if(table_name == i):
-        cursor.execute(('SELECT * FROM "{}" '.format(table_name.replace('"', '""'))))
-        tab = cursor.fetchall()
-        col_name = [i[0] for i in cursor.description]
-        #for a in col_name:
-        print("--------------------------------------------------------------------")
-        print(*col_name, sep = " | ")
-        print("--------------------------------------------------------------------")
-
-        for row in tab:
-            #print(row.keys(0), row.keys(1), row.keys(2), row.keys(3), row.keys(4))
-            print(str(row[0]),'  |  ', str(row[1]), '|', str(row[2]), '|', str(row[3]), '|', str(row[4]))
-
-        display_operations()
-        op = input("Input here: ")
-
-        # Update query
-        if(op == "1" or op == "update" or op == "Update"):
-            #print("hahahah")
-            #update_id = input("Enter "+col_name[0]+ " of the record to be updated : ")
-            id = col_name[0]
-            update_data(id)
-
-        # Delete query
-        if (op == "2" or op == "delete" or op == "Delete"):
-            #delete_id = input("Enter " + col_name[0] + " of the record to be deleted : ")
-            id = col_name[0]
-            delete_data(id)
-
-        # Download data
-        if (op == "3" or op == "download" or op == "Download table"):
-            download_data()
-
-        # Exit application
-        if (op == "0" or op == "4" or op == "exit"):
-            exit()
+    display_tables(table_name)
