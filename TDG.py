@@ -153,8 +153,7 @@ class TableDataGateway:
             arr_id = '''select arrival_id from arrival where airport = (?)'''
             cursorObj.execute(arr_id, (airporta,))
             a_id = cursorObj.fetchone()
-            #print(airporta)
-            #print('a :',a_id)
+
             if(a_id == None or d_id == None):
                 a_id = [1]
                 d_id = [1]
