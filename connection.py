@@ -1,32 +1,25 @@
-import mysql.connector as mysql
+import sqlite3
+from sqlite3 import Error
+#from Json_TO_Sql import TableCreation
 
-# variables
-host = "localhost"
-username = "root"
-password = ""
+class Connection:
+    #TableCreation = TableCreation()
+    conn = None
+    count = 0
 
-# mysql connection
-try:
-    db = mysql.connect(host=host, username=username, password=password)
-    print("Connected to mysql server successfully!!")
+    @staticmethod
+    def get_connection():
+        """ create a database connection to a SQLite database """
+        db_file = 'flight.db'
+        if(Connection.count == 0):
+            try:
+                Connection.conn = sqlite3.connect(db_file)
+                print(sqlite3.version)
+                print("Database " + db_file + " created successfully !!!!")
 
-    # Creating a database
-    try:
-        command_handler = db.cursor()
-        command_handler.execute("CREATE DATABASE flights")
-        print("Cars database has been created")
-    except Exception as e:
-        # Connecting to an existing database
-        print("Could not create database. Database with given name already exists")
-        print("Connecting with the database ...")
-        db1 = mysql.connect(host=host, username=username, password=password, database="flights")
-        print("Connected to flights database")
+            except Error as e:
+                print(e)
 
-except Exception as e:
-    print(e)
-    print("Failed to connected....")
-
-
-
-
-
+            return Connection.conn
+        else:
+            return Connection.conn
