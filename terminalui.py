@@ -46,8 +46,6 @@ while True:
 
         # Delete query
         if (op == "2" or op == "delete" or op == "Delete"):
-            # delete_id = input("Enter " + col_name[0] + " of the record to be deleted : ")
-            #id = col_name[0]
             TableDataGateway.delete_data(col_name, table_name)
 
         # Download data
@@ -60,7 +58,7 @@ while True:
 
         # Exit application
         if (op == "0" or op == "4" or op == "exit"):
-            exit()
+            None
 
     else :
         exit()
