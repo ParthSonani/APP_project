@@ -1,9 +1,8 @@
 import sqlite3
 from sqlite3 import Error
-#from Json_TO_Sql import TableCreation
+
 
 class Connection:
-    #TableCreation = TableCreation()
     conn = None
     count = 0
 
