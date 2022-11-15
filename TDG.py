@@ -1,5 +1,4 @@
-import json
-import sqlite3
+
 import pandas as pd
 from connection import Connection
 
@@ -106,6 +105,21 @@ class TableDataGateway:
         except Exception as e:
             print(e)
 
+    def search_data(self, col_name, table_name):
+        id = col_name[0]
+        search_id = input("Enter " + col_name[0] + " of the record to be searched : ")
+        try:
+            cursorObj = self.cursor()
+            conn = self.conn
+
+            rec = cursorObj.execute(('SELECT * FROM ' + table_name + ' WHERE "{}"=?'.format(id.replace('"', '""'))),
+                                 (search_id,))
+            rec = rec.fetchone()
+            print(rec)
+
+        except Exception as e:
+            print(e)
+
     def download_data(self, table_name):
         db_df = pd.read_sql_query('SELECT * FROM ' + table_name + '', self.conn)
         db_df.to_csv('' + table_name + '.csv', index=False)
@@ -149,7 +163,6 @@ class TableDataGateway:
             dep_id = '''select departure_id from departure where airport = (?)'''
             cursorObj.execute(dep_id, (airportd,))
             d_id = cursorObj.fetchone()
-            #print('d:',d_id)
             arr_id = '''select arrival_id from arrival where airport = (?)'''
             cursorObj.execute(arr_id, (airporta,))
             a_id = cursorObj.fetchone()
@@ -167,7 +180,7 @@ class TableDataGateway:
                     (flight_date, flight_status, flight_name, d_id[0], a_id[0]))
                 conn.commit()
 
-        print("Table arrival records inserted succesfully !!!")
+        print("Table flight_detail records inserted succesfully !!!")
 
     def create_tables(self):
         cursorObj = self.cursor()
