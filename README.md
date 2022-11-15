@@ -1,4 +1,6 @@
 # SOEN6441_project
+Flight data management system
+
 The system flow is as follows:
 terminalui.py ---> TDG.py ---> connection.py
 
