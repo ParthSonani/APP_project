@@ -12,3 +12,5 @@ terminalui.py -- Interact with user providing list of tables available on databa
 TDG.py -- Interacts directly with the database. It runs parameterized queries on the database without allowing the terminalui.py to have direct access to the database.
 
 connection.py -- Establishes the connection with the local database. Creates a single instance of the connection which the rest of the system uses.
+
+Project video link - https://drive.google.com/file/d/1cyXLDOyLEnHkjkMhvFFi2WAdvGUXDvjQ/view?usp=share_link
